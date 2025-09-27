@@ -1,0 +1,5 @@
+print("HELLO WORLD!")
+print("HELLO There again!")
+print("and again!")
+print("this really cool!")
+print("coding fast!")
