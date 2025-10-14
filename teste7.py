@@ -1,4 +1,4 @@
-par = {1, 2 ,3 ,4}
+impar = {1, 3, 5, 7, 9, 11}
 
-for i in par:
+for i in impar:
     print(i)
