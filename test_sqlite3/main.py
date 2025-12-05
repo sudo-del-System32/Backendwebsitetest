@@ -33,7 +33,6 @@ def create(name : str, email : str):
         print(f"USUARIO {name} ADICIONADO")
     except Exception as e:
         print("ERROR:",e)
-    connect.commit()
 
 def search(campo : str, info : str):
     try:
@@ -58,10 +57,10 @@ def read_all():
 def update(id : int, campo : str, newInfo : str):
     try:
         cursor.execute(f"""UPDATE users SET {campo} = ? WHERE id = ? """, (newInfo, id))
+        connect.commit()
         print(f"Novo {campo} agora é {newInfo}")
     except Exception as e:
         print("ERROR:",e)
-    connect.commit()
 
 def delete():
     pass
@@ -69,6 +68,12 @@ def delete():
 
 def main():
     start()
+    read_all()
+    
+    create("sarah", "anaLover123@gay.com.br")
+    read_all()
+
+    update(3, "email", "naoexito@null.com")
     read_all()
 
     cursor.close()

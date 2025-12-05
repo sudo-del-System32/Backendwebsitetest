@@ -1,0 +1,33 @@
+import sqlite3
+
+connect = sqlite3.connect("databasesTest/users2.db")
+
+cursor = connect.cursor()
+
+#can also connect.execute(query) then doenst need connect.commit!
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        email TEXT UNIQUE
+    )
+''')
+connect.commit
+
+
+cursor.execute("""INSERT INTO users (name, email) VALUES (?, ?)""", ("gello", "wdadaw"))
+connect.commit
+
+cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", ("Leticia", "letébemlegal@gmail.com"))
+connect.commit
+
+lista = cursor.execute("SELECT * FROM users")
+connect.commit
+
+
+
+for x in lista:
+    print(x)
+
+cursor.close()
+connect.close()
