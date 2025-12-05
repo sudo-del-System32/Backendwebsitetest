@@ -1,8 +1,8 @@
 import sqlite3
 
-connect = sqlite3.connect("databasesTest/users2.db")
-
+connect = sqlite3.connect("data/users2.db")
 cursor = connect.cursor()
+
 
 #can also connect.execute(query) then doenst need connect.commit!
 cursor.execute('''
@@ -15,11 +15,11 @@ cursor.execute('''
 connect.commit
 
 
-cursor.execute("""INSERT INTO users (name, email) VALUES (?, ?)""", ("gello", "wdadaw"))
-connect.commit
+connect.execute("""INSERT INTO users (name, email) VALUES (?, ?)""", ("Daniel", "fcobertini@gmail.com"))
+connect.commit()
 
 cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", ("Leticia", "letébemlegal@gmail.com"))
-connect.commit
+connect.commit()
 
 lista = cursor.execute("SELECT * FROM users")
 connect.commit
