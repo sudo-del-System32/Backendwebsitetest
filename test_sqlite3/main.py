@@ -1,7 +1,19 @@
 import sqlite3
 
-connect = sqlite3.connect("users.db")
+connect = sqlite3.connect("test_sqlite3/users.db")
 cursor = connect.cursor()
+
+class Users:
+
+    id : int
+    name : str
+    email : str
+
+    def __init__(self, tuple):
+        self.id , self.name, self.email, = tuple 
+
+user_list : list[Users] = []
+
 
 def start():
     #pode se usar connect.execute e sera diretamente executado sem a necessidade de um commit,
@@ -18,13 +30,19 @@ def create(name : str, email : str):
     try:
         cursor.execute("""INSERT INTO users (name, email) VALUES (?, ?)""", (name, email))
         connect.commit()
-        print(f"USUARIO {newUser} ADICIONADO")
+        print(f"USUARIO {name} ADICIONADO")
     except Exception as e:
-        print(e)
+        print("ERROR:",e)
     connect.commit()
 
-def read(campo : str, searchInfo : str):
-    pass
+def search(campo : str, info : str):
+    try:
+        users = cursor.execute(f"SELECT * FROM users WHERE {campo} = ?", (info,))
+        print("USERS:")
+        for user in users:
+            print("\t",user[1])
+    except Exception as e:
+        print("ERROR: ",e)
 
 
 def read_all():
@@ -32,24 +50,26 @@ def read_all():
         users = cursor.execute("SELECT * FROM users")
         print("USERS:")
         for user in users:
+            #user_list.append(Users(user)) 
             print("\t", user[1])
     except Exception as e:
-        print(e)
+        print("ERROR:",e)
 
 def update(id : int, campo : str, newInfo : str):
     try:
         cursor.execute(f"""UPDATE users SET {campo} = ? WHERE id = ? """, (newInfo, id))
         print(f"Novo {campo} agora é {newInfo}")
     except Exception as e:
-        print(e)
+        print("ERROR:",e)
     connect.commit()
 
+def delete():
+    pass
 
 
 def main():
     start()
     read_all()
-
 
     cursor.close()
     connect.close()
