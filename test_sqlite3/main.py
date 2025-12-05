@@ -1,6 +1,6 @@
 import sqlite3
 
-connect = sqlite3.connect("test_sqlite3/users.db")
+connect = sqlite3.connect("data/users.db") #sqlite://data/user2s.db
 cursor = connect.cursor()
 
 class Users:
@@ -11,6 +11,13 @@ class Users:
 
     def __init__(self, tuple):
         self.id , self.name, self.email, = tuple 
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email
+        }
 
 user_list : list[Users] = []
 
