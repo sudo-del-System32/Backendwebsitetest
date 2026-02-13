@@ -69,18 +69,21 @@ def update(id : int, campo : str, newInfo : str):
     except Exception as e:
         print("ERROR:",e)
 
-def delete():
-    pass
+def delete(id : int):
+    try:
+        cursor.execute(f"""DELETE FROM users 
+                       WHERE id = ?""", (id,))
+        connect.commit()
+        print(f"Usuario de id {id} foi excluido")
+    
+    except Exception as e:
+        print("ERROR:",e)
 
 
 def main():
     start()
-    read_all()
-    
-    create("sarah", "anaLover123@gay.com.br")
-    read_all()
 
-    update(3, "email", "naoexito@null.com")
+
     read_all()
 
     cursor.close()

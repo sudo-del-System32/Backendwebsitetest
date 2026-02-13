@@ -1,6 +1,6 @@
 import sqlite3
 
-connect = sqlite3.connect("data/users2.db")
+connect = sqlite3.connect("data/users2.db") #sqlite://data/user2s.db
 cursor = connect.cursor()
 
 
@@ -12,7 +12,7 @@ cursor.execute('''
         email TEXT UNIQUE
     )
 ''')
-connect.commit
+connect.commit()
 
 
 connect.execute("""INSERT INTO users (name, email) VALUES (?, ?)""", ("Daniel", "fcobertini@gmail.com"))
@@ -22,7 +22,6 @@ cursor.execute("INSERT INTO users (name, email) VALUES (?, ?)", ("Leticia", "let
 connect.commit()
 
 lista = cursor.execute("SELECT * FROM users")
-connect.commit
 
 
 
