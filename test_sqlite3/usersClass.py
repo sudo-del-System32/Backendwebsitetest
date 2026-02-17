@@ -10,7 +10,9 @@ class User(BaseModel):
     email : str
 
     def __init__(self, tuple):
-        self.id , self.name, self.email, = tuple 
+
+        id , name, email = tuple 
+        super().__init__(id=id, name=name, email=email)
 
     def to_dict(self):
         return {

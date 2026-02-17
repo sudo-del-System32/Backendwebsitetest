@@ -9,8 +9,8 @@ class Users:
     name : str
     email : str
 
-    def __init__(self, tuple):
-        self.id , self.name, self.email, = tuple 
+    def __init__(self, tuple : tuple):
+        self.id , self.name, self.email = tuple 
 
     def to_dict(self):
         return {

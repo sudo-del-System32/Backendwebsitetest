@@ -7,17 +7,16 @@ from usersClass import User
 
 class DataBank():
 
-    user_list : List[User] = []
 
     def __init__(self, dataBankName):
         try:
             self.connect = sql.connect(dataBankName) #sqlite://data/user2s.db
             self.cursor = self.connect.cursor()
+            self.start()
         
         except Exception as e:
             print("Error:", e)
         
-        self.start()
 
 
 
@@ -36,57 +35,57 @@ class DataBank():
 
         except Exception as e:
             print("Error:", e)
-
-        self.bank_to_ram()
-
-
+            return None
+        
 
 
-    def bank_to_ram(self):
+
+    def add_user(self, new_user : User):
         try:
-            user_list = self.cursor.execute("SELECT * FROM users")
-
-        except Exception as e:
-            print("ERROR:",e)
-
-
-
-
-    def new_user(self, new_user : User):
-        try:
-            self.cursor.execute("""INSERT INTO users (id, name, email) VALUES (?, ?, ?)""", (User))
+            a, b, c = (new_user.__dict__.values())
+            self.cursor.execute("""INSERT INTO users (id, name, email) VALUES (?, ?, ?)""", (a, b, c))
             self.connect.commit()
-            print(f"USUARIO {User.name} ADICIONADO")
+            return True
 
         except Exception as e:
-            print("ERROR:", e)
-
+            print("Error:", e)
+            return False
+        
 
 
     def search(self, campo : str, info : str):
         try:
-            found_users = self.cursor.execute(f"SELECT * FROM users WHERE {campo} = ?", (info,))
+            cursor = self.cursor.execute(f"SELECT * FROM users WHERE {campo} = ?", (info,))
             
-            print("USERS:")
-            for i, user in enumerate(found_users):
-                print(f"\tItem[{i+1}]", user[1])
+            found_users : List[User] = []
 
-        except Exception as e:
-            print("ERROR: ",e)
-
-
-
-    def read_all(self):
-        try:
-            users = self.cursor.execute("SELECT * FROM users")
+            for user in cursor.fetchall():
+                found_users.append(User(user))
             
-            print("USERS:")
-            for i, user in enumerate(users):
-                print(f"\tUsuario[{i+1}]", user[1])
+
+            return found_users
         
         except Exception as e:
-            print("ERROR:",e)
+            print("Error:", e)
+            return None
+        
 
+
+    def user_list(self):
+        try:
+            cursor = self.cursor.execute("SELECT * FROM users")
+
+            list_of_users : List[User] = []
+
+            for user in cursor.fetchall():
+                list_of_users.append(User(user))
+
+
+            return list_of_users
+        
+        except Exception as e:
+            print("Error:", e)
+            return None
 
 
     def update(self, id : int, campo : str, newInfo : str):
@@ -94,29 +93,31 @@ class DataBank():
             self.cursor.execute(f"""UPDATE users SET {campo} = ? WHERE id = ? """, (newInfo, id))
             self.connect.commit()
 
-            print(f"Novo {campo} agora é {newInfo}")
+            return True
 
         except Exception as e:
-            print("ERROR:",e)
-
+            print("Error:", e)
+            return False
 
 
     def delete(self, id : int):
         try:
-            self.cursor.execute(f"""DELETE FROM users 
-                        WHERE id = ?""", (id,))
+            self.cursor.execute(f"""DELETE FROM users WHERE id = ?""", (id,))
             self.connect.commit()
 
-            print(f"Usuario de id {id} foi excluido")
+            return True
         
         except Exception as e:
-            print("ERROR:",e)
-
+            print("Error:", e)
+            return False
 
 
 
 # Main
 bd = DataBank("data/users2.db")
 
-bd.search("id", 1)
-bd.read_all()
+
+x = bd.user_list()
+
+for i in x:
+    print(i.__dict__)
