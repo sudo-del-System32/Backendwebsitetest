@@ -2,7 +2,7 @@ import sqlite3 as sql
 
 from typing import List, Optional
 
-from usersClass import User 
+from test_sqlite3.usersClass import User 
 
 
 class DataBank():
@@ -10,18 +10,25 @@ class DataBank():
 
     def __init__(self, dataBankName):
         try:
-            self.connect = sql.connect(dataBankName) #sqlite://data/user2s.db
-            self.cursor = self.connect.cursor()
+            self.dataBankName = dataBankName
+            self.start_connection()
             self.start()
         
         except Exception as e:
             print("Error:", e)
         
+        self.connect.close()
 
+
+
+    def start_connection(self):
+            self.connect = sql.connect(self.dataBankName) 
+            self.cursor = self.connect.cursor()
 
 
 
     def start(self):
+        
         
         try:
             self.cursor.execute("""CREATE TABLE IF NOT EXISTS users(
@@ -41,19 +48,29 @@ class DataBank():
 
 
     def add_user(self, new_user : User):
+        
+        self.start_connection()
+        
         try:
             a, b, c = (new_user.__dict__.values())
             self.cursor.execute("""INSERT INTO users (id, name, email) VALUES (?, ?, ?)""", (a, b, c))
             self.connect.commit()
+            
+            self.connect.close()
             return True
 
         except Exception as e:
             print("Error:", e)
-            return False
         
+            self.connect.close()
+            return False
+
 
 
     def search(self, campo : str, info : str):
+        
+        self.start_connection()
+        
         try:
             cursor = self.cursor.execute(f"SELECT * FROM users WHERE {campo} = ?", (info,))
             
@@ -63,15 +80,24 @@ class DataBank():
                 found_users.append(User(user))
             
 
+            self.connect.close()
             return found_users
         
         except Exception as e:
             print("Error:", e)
+            
+            self.connect.close()
             return None
         
 
 
+
+
+
     def user_list(self):
+        
+        self.start_connection()
+        
         try:
             cursor = self.cursor.execute("SELECT * FROM users")
 
@@ -81,33 +107,53 @@ class DataBank():
                 list_of_users.append(User(user))
 
 
+            self.connect.close()
             return list_of_users
         
         except Exception as e:
             print("Error:", e)
+            
+            self.connect.close()
             return None
 
 
+
+
+
     def update(self, id : int, campo : str, newInfo : str):
+        
+        self.start_connection()
+        
         try:
+            
             self.cursor.execute(f"""UPDATE users SET {campo} = ? WHERE id = ? """, (newInfo, id))
             self.connect.commit()
 
+            self.connect.close()
             return True
 
         except Exception as e:
             print("Error:", e)
+
+            self.connect.close()
             return False
 
 
+
     def delete(self, id : int):
+        
+        self.start_connection()
+        
         try:
             self.cursor.execute(f"""DELETE FROM users WHERE id = ?""", (id,))
             self.connect.commit()
 
+            self.connect.close()
             return True
         
         except Exception as e:
             print("Error:", e)
+        
+            self.connect.close()
             return False
 
