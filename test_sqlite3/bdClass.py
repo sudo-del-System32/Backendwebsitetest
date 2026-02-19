@@ -111,13 +111,3 @@ class DataBank():
             print("Error:", e)
             return False
 
-
-
-# Main
-bd = DataBank("data/users2.db")
-
-
-x = bd.user_list()
-
-for i in x:
-    print(i.__dict__)
