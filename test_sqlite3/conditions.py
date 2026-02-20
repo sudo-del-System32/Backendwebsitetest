@@ -1,6 +1,12 @@
+import sys
+
+# Testar caminho em outros computadores
+sys.path.append(sys.path[0] + "/..")
+
+
 import sqlite3 as sq
-from usersClass import User 
-from bdClass import DataBank
+from test_sqlite3.usersClass import User 
+from test_sqlite3.bdClass import DataBank
 
 
 

@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(1, "/home/danielbert/Desktop/Projetos/Backendwebsitetest/")
+sys.path.append(sys.path[0] + "/..")
 
 from test_sqlite3.usersClass import User 
 from test_sqlite3.bdClass import DataBank
